@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Discount.Api.Controllers
 {
-    [Route("api/Discount")]
+    [Route("api/v1/Discount")]
     [ApiController]
     public class DiscountController : ControllerBase
     {
@@ -26,9 +26,11 @@ namespace Discount.Api.Controllers
         [ProducesResponseType(typeof(Coupon), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetDisocunt(string productName)
         {
-            var coupon = await _Repo.GetDiscount(productName);
+            
+                var coupon = await _Repo.GetDiscount(productName);
 
-            return Ok(coupon);
+                return Ok(coupon);
+
         }
         #endregion
 

@@ -14,7 +14,7 @@ namespace Discount.Api.Repository
         {
             _configuration = configuration;
             connection = new NpgsqlConnection
-                (_configuration.GetValue<string>("DatabaseSetting:ConnectionString"));
+                (_configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
         }
 
         #endregion
