@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ordering.Application.Features.Orders.Queries.GetOrdersList
 {
-    public class OrdersDto
+    public class OrdersVm
     {
         public int Id { get; set; }
         public string UserName { get; set; }
