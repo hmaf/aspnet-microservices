@@ -1,4 +1,7 @@
+using Ordering.Api.Extensions;
 using Ordering.Application;
+using Ordering.Infrastracture;
+using Ordering.Infrastracture.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastractureServices(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,5 +28,11 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MigrateDatabase<Context>((context, services) =>
+{
+    var logger = services.GetRequiredService<ILogger<ContextSeed>>();
+    ContextSeed.Seed(context, logger).Wait();
+});
 
 app.Run();

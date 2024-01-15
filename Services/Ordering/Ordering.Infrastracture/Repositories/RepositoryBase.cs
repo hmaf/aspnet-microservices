@@ -9,7 +9,7 @@ namespace Ordering.Infrastracture.Repositories
 {
     public class RepositoryBase<T> : IAsyncRepository<T> where T : EntityBase
     {
-        private readonly Context _db;
+        public readonly Context _db;
         private DbSet<T> _query;
 
         public RepositoryBase(Context db)

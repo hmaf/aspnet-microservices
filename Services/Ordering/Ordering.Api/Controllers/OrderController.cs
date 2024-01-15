@@ -29,11 +29,11 @@ namespace Ordering.Api.Controllers
 
         #region Get all order
 
-        [HttpGet("{userName}", Name = "GetOrderByUserName")]
+        [HttpGet("{userName}", Name = "GetOrders")]
         [ProducesResponseType(typeof(IEnumerable<OrdersVm>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetOrderByUserName(GetOrdersListQuery userName)
+        public async Task<ActionResult<List<OrdersVm>>> GetOrderByUserName(string userName)
         {
-            var result = await _mediator.Send(userName);
+            var result = await _mediator.Send(new GetOrdersListQuery(userName));
 
             return Ok(result);
         }
@@ -70,7 +70,7 @@ namespace Ordering.Api.Controllers
 
         #region Delete order
 
-        [HttpPut("{id}", Name = "DeleteOrder")]
+        [HttpDelete("{id}", Name = "DeleteOrder")]
         [ProducesResponseType((int)StatusCodes.Status204NoContent)]
         [ProducesResponseType((int)StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]

@@ -33,7 +33,7 @@ namespace Ordering.Application.Features.Orders.Commands.DeleteOrder
             }
             else
             {
-                await _orderRepository.DeleteAsync(order.Id);
+                await _orderRepository.DeleteAsync(order);
                 _logger.LogInformation($"Order By {order.Id} is successfully deleted");
             }
 

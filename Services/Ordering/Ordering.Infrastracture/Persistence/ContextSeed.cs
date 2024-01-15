@@ -10,12 +10,12 @@ namespace Ordering.Infrastracture.Persistence
 {
     public class ContextSeed
     {
-        public static async Task Seed(Context context, ILogger<Context> logger)
+        public static async Task Seed(Context context, ILogger<ContextSeed> logger)
         {
              if(!context.Orders.Any())
             {
                 await context.Orders.AddRangeAsync(GetPreconfiguredOrders());
-                await context.Orders.AddRangeAsync();
+                await context.SaveChangesAsync();
                 logger.LogInformation("data seed section cofigured");
             }
         }
@@ -32,7 +32,11 @@ namespace Ordering.Infrastracture.Persistence
                     EmailAddress = "test@test.com",
                     City = "tehran",
                     Country = "iran",
-                    TotalPrice = 10000
+                    TotalPrice = 10000,
+                    BankName = "saderat",
+                    LastModifiedBy = "hadi",
+                    PaymentMethod = 1,
+                    RefCode = "3"
                 }
             };
         }
