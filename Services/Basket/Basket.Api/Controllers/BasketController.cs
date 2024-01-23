@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Basket.Api.Entities;
 using System.Net;
 using Basket.Api.GrpcServices;
+using AutoMapper;
+using EventBus.Message.Events;
+using MassTransit;
 
 namespace Basket.Api.Controllers
 {
@@ -13,11 +16,15 @@ namespace Basket.Api.Controllers
         #region Constractor
         private readonly IBasketRepository _basketRepository;
         private readonly DiscountGrpcService _discountService;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
 
-        public BasketController(IBasketRepository basketRepository, DiscountGrpcService discountService)
+        public BasketController(IBasketRepository basketRepository, DiscountGrpcService discountService, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _basketRepository = basketRepository;
             _discountService = discountService;
+            _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         #endregion
@@ -77,6 +84,32 @@ namespace Basket.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
+
+        #region Checkout
+
+        [HttpPost("[action]")]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest  )]
+        public async Task<IActionResult> Checout([FromBody] BasketCheckout basketCheckout)
+        {
+            // get existing basket with total price
+            var basket = await _basketRepository.GetUserBasketAsync(basketCheckout.UserName);
+            if (basket is null) return BadRequest();
+
+            // create basketCheckoutEvent -- set total price on basketCheckout event Message
+            var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
+            eventMessage.TotalPrice = basket.TotalPrice;
+
+            // send checkout event to RabbitMQ
+            await _publishEndpoint.Publish(eventMessage);
+
+            // remove basket
+            await _basketRepository.DeleteBasketAsync(basketCheckout.UserName);
+
+            return Accepted();
+        }
+
         #endregion
     }
 }
