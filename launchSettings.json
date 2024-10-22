@@ -8,9 +8,10 @@
         "catalog.api": "StartDebugging",
         "discount.api": "StartDebugging",
         "discount.grpc": "StartDebugging",
-        "ordering.api": "StartDebugging"
+        "ordering.api": "StartDebugging",
+        "ocelotgw": "StartDebugging",
+        "shopping.aggregator": "StartDebugging"
       }
     }
   }
 }
-

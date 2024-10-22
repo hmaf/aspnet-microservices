@@ -14,6 +14,11 @@ namespace Ordering.Infrastracture.Repositories
     {
         public OrderRepository(Context db) : base(db) { }
 
+        public async Task<IEnumerable<Order>> Getall()
+        {
+            return await GetByQuerysString("select * from [Orders]");
+        }
+
         public async Task<IEnumerable<Order>> GetOrdersByUserName(string userName)
             => await _db.Orders
                         .Where(obj => obj.UserName.Equals(userName))

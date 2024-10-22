@@ -81,6 +81,11 @@ namespace Ordering.Infrastracture.Repositories
             return await _query.FindAsync(id);
         }
 
+        public async Task<IReadOnlyList<T>> GetByQuerysString(string query)
+        {
+            return await _query.FromSqlRaw(query).ToListAsync();
+        }
+
         public async Task UpdateAsync(T entity)
         {
             _db.Entry(entity).State = EntityState.Modified;

@@ -5,6 +5,7 @@ using Ordering.Application.Contracts.Persistence;
 using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 using Ordering.Application.Features.Orders.Commands.DeleteOrder;
 using Ordering.Application.Features.Orders.Commands.UpdateOrder;
+using Ordering.Application.Features.Orders.Queries.GetAll;
 using Ordering.Application.Features.Orders.Queries.GetOrdersList;
 using System.Net;
 
@@ -26,6 +27,16 @@ namespace Ordering.Api.Controllers
         }
 
         #endregion
+
+
+        [HttpPut("Getall")]
+        
+        public async Task<IActionResult> Getall(GetAllQuery query)
+        {
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
+        }
 
         #region Get all order
 

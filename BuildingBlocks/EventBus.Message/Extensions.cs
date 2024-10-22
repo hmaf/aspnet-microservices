@@ -16,6 +16,7 @@ namespace EventBus.Message
 
             services.AddMassTransit(config =>
             {
+
                 config.UsingRabbitMq((ctx, conf) =>
                 {
                     conf.Host("localhost", "/", c =>

@@ -29,11 +29,8 @@ builder.Services.AddMassTransit(config =>
 
     config.UsingRabbitMq((ctx, conf) =>
     {
-        conf.Host("localhost", "/", c =>
-        {
-            c.Username("guest");
-            c.Password("guest");
-        });
+        conf.Host(builder.Configuration.GetValue<string>("EventBusSettings:HostAddress"));
+        conf.Exclusive = false;
         conf.ReceiveEndpoint(EventBusConstants.BasketCheckOutQueue, c =>
         {
             c.ConfigureConsumer<BasketCheckoutConsumer>(ctx);
